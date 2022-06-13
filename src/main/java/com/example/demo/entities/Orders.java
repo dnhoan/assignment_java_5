@@ -23,7 +23,7 @@ public class Orders implements Serializable {
     @Column(name="order_id", unique=true, nullable=false, length=50)
     private String orderId;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private Users user;
     

@@ -62,7 +62,11 @@ public class CartService {
 				}
 			}
 		}
-		this.httpSession.setAttribute("order", order);
+		if(order.getTotalMoney() == 0) {
+			this.httpSession.removeAttribute("order");
+		} else {
+			this.httpSession.setAttribute("order", order);
+		}
 	}
 
 	public void addToCart(Products product, int quantity) {
@@ -92,7 +96,7 @@ public class CartService {
 	public void validateFormDeliveryInfo(BindingResult bindingResult, OrderDeliveryInfo orderDeliveryInfo) {
 		String address = orderDeliveryInfo.getDeliveryAddress();
 		if(address.trim().length() < 10 || address.trim().length() > 225) {
-			bindingResult.rejectValue("address", "length.orderDeliveryInfo.address", "Địa chỉ nhận hàng từ 10-225 ký tự");
+			bindingResult.rejectValue("deliveryAddress", "length.orderDeliveryInfo.address", "Địa chỉ nhận hàng từ 10-225 ký tự");
 		}
 		String note = orderDeliveryInfo.getNote();
 		if(note.trim().length() > 225) {

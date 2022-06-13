@@ -141,7 +141,7 @@
 						value="${order.mtime}" var="mtime" /> <c:out value="${mtime}" /></td>
 				<td style="width: 85px"><c:if
 						test="${order.orderStatus == '0'}">
-						<button type="button" class="btn btn-danger"
+						<button type="button" class="btn btn-danger"  data-toggle="tooltip" data-placement="top" title="Hủy đơn hàng"
 							data-bs-toggle="modal" data-bs-target="#cancel${order.id }">
 							<i class="bi bi-x-circle"></i>
 						</button>
@@ -151,7 +151,7 @@
 								<div class="modal-content">
 									<div class="modal-header">
 										<h5 class="modal-title" id="exampleModalLabel">Hủy</h5>
-										<button type="button" class="btn-close"
+										<button type="button" class="btn-close" 
 											data-bs-dismiss="modal" aria-label="close"></button>
 									</div>
 									<div class="modal-body">

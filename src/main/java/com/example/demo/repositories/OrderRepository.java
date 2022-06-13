@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.example.demo.entities.Orders;
 
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
-//	@Query(name = "select o from Orders o where o.user.id= :userId Order By o.orderStatus ASC")
+	@Query(name = "select o from Orders o where o.id= :id Order")
+	Orders getOrderById(int id);
 	public Page<Orders> findByUserIdOrderByCtimeDesc(int userId, Pageable pageable);
 	public Page<Orders> findByOrderByCtimeDesc(Pageable pageable);
 }	
