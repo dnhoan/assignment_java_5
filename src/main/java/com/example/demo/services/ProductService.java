@@ -1,14 +1,19 @@
 package com.example.demo.services;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
+import javax.validation.Valid;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -19,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entities.Categories;
 import com.example.demo.entities.Products;
+import com.example.demo.entities.Users;
 import com.example.demo.repositories.CategoryRepository;
 import com.example.demo.repositories.ProductRepository;
 
@@ -39,6 +46,8 @@ public class ProductService implements ICrudService<Products, Integer> {
 	private CategoryRepository categoryRepository;
 	@Autowired
 	private ServletContext servletContext;
+	@Autowired
+	private HttpSession httpSession;
 
 	@Override
 	public void index(Model model, int size, int page) {
@@ -80,7 +89,8 @@ public class ProductService implements ICrudService<Products, Integer> {
 
 	public String uploadFile(MultipartFile attach) throws IllegalStateException, IOException {
 		if (!attach.isEmpty()) {
-			String filename = attach.getOriginalFilename();
+			Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+			String filename = "product_img_" + timestamp;
 			File dirFile = new File(this.servletContext.getRealPath("/files"));
 			if (!dirFile.exists()) {
 				dirFile.mkdir();
@@ -144,14 +154,25 @@ public class ProductService implements ICrudService<Products, Integer> {
 		model.addAttribute("categories", categories);
 	}
 
-	public void importFileExcel(Part excelPart, Categories category, RedirectAttributes redirectAttributes) {
+	@Scheduled(fixedRate = 10 * 1000)
+	public void createBatchProductByExcel() {
+		 File fileOrDir = new File(this.servletContext.getRealPath("/import_batch_products"));
+		 Optional<File[]> files = Optional.of(fileOrDir.listFiles());
+		 if(!files.isEmpty()) {
+			 for (File file : files.get()) {
+				String uid = file.getName().split("_")[1];
+				String cateId = file.getName().split("_")[3];
+				this.readFileExcel(file);
+			}
+		 }
+	}
+	private void readFileExcel(File file) {
 		List<Products> products = new ArrayList<>();
 		try {
-//			Part excelPart = request.getPart("file_excel");
-
-			InputStream fis = excelPart.getInputStream();
-
-			XSSFWorkbook myWorkBook = new XSSFWorkbook(fis);
+			InputStream targetStream = new FileInputStream(file);
+			System.out.println("file " + file);
+			
+			XSSFWorkbook myWorkBook = new XSSFWorkbook(targetStream);
 			XSSFSheet mySheet = myWorkBook.getSheetAt(0);
 
 			for (Row row : mySheet) {
@@ -161,49 +182,89 @@ public class ProductService implements ICrudService<Products, Integer> {
 					Products product = new Products();
 					while (cellIterator.hasNext()) {
 						Cell cell = cellIterator.next();
-
-						System.out.println("index " + cell.getRowIndex());
 						switch (cell.getColumnIndex()) {
 							case 0:
-								product.setName(cell.getStringCellValue());
+								String name = cell.getCellTypeEnum() == CellType.NUMERIC ? (int) cell.getNumericCellValue() + ""
+										: cell.getStringCellValue();
+								System.out.println("name " + name);
+								
+								
+								product.setName(name);
 								break;
 							case 1:
-								product.setStock((int) cell.getNumericCellValue());
+								try {
+									int stock = (int) cell.getNumericCellValue();
+									product.setStock(stock);
+								} catch (Exception e) {
+									
+								}
 								break;
 							case 2:
-								product.setPrice((int) cell.getNumericCellValue());
+								try {
+									int price = (int) cell.getNumericCellValue();
+									product.setPrice(price);
+								} catch (Exception e) {
+									
+								}
 								break;
 							case 3:
-								product.setColor(cell.getStringCellValue());
+								try {
+									String color = cell.getStringCellValue();
+									product.setColor(color);
+								} catch (Exception e) {
+									
+								}
 								break;
 							case 4:
-								product.setSize(cell.getCellTypeEnum() == CellType.NUMERIC ? (int) cell.getNumericCellValue() + ""
-										: cell.getStringCellValue());
+								String size = cell.getCellTypeEnum() == CellType.NUMERIC ? (int) cell.getNumericCellValue() + ""
+										: cell.getStringCellValue();
+								product.setSize(size);
 								break;
 							case 5:
-								product.setDescription(cell.getStringCellValue());
+								String description = cell.getStringCellValue();
+								product.setDescription(description);
 								break;
 						}
 					}
-					product.setStatus("1");
-					product.setCategory(category);
 					System.out.println(product);
-					products.add(product);
+//					product.setStatus("1");
+//					product.setCategory(category);
+//					System.out.println(product);
+//					products.add(product);
 				}
 			}
+			targetStream.close();
+			myWorkBook.close();
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("error", "Lỗi file excel");
 			e.printStackTrace();
+//			redirectAttributes.addFlashAttribute("error", "Lỗi file excel");
 		}
 		if (!products.isEmpty()) {
 			try {
-				this.productRepository.saveAll(products);
-				redirectAttributes.addFlashAttribute("message", "Thêm mới thành công");
+//				this.productRepository.saveAll(products);
+//				redirectAttributes.addFlashAttribute("message", "Thêm mới thành công");
 			} catch (Exception e) {
-				redirectAttributes.addFlashAttribute("error", "Thêm mới thất bại");
+//				redirectAttributes.addFlashAttribute("error", "Thêm mới thất bại");
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void importFileExcel(MultipartFile excelPart, Categories category, RedirectAttributes redirectAttributes)
+			throws IllegalStateException, IOException {
+		if (!excelPart.isEmpty()) {
+			System.out.println(excelPart.getContentType());
+			File dirFile = new File(this.servletContext.getRealPath("/import_batch_products"));
+			if (!dirFile.exists()) {
+				dirFile.mkdir();
+			}
+			Users u = (Users) this.httpSession.getAttribute("user");
+			String filename = "uid_" +  u.getId() + "_cateId_" + category.getId() + "_products.xlsx";
+			File file = new File(this.servletContext.getRealPath("/import_batch_products/" + filename));
+			System.out.println("file " + file);
+			excelPart.transferTo(file);
+		}
+
 	}
 
 }

@@ -126,7 +126,7 @@ public class ProductController {
 
 	@PostMapping("importExcel")
 	public String importExcel(@RequestParam("category_id") Categories categoy,
-			@RequestParam("file_excel") Part excelPart, RedirectAttributes redirectAttributes) {
+			@RequestParam("file_excel") MultipartFile excelPart, RedirectAttributes redirectAttributes) throws IllegalStateException, IOException {
 		this.productService.importFileExcel(excelPart, categoy, redirectAttributes);
 		return "redirect:/admin/products/index";
 	}

@@ -184,6 +184,8 @@
 								phẩm</a></li>
 						<li><a href="/assignment_java_5/admin/orders/index">Đơn
 								hàng</a></li>
+						<li><a href="/assignment_java_5/admin/ordersStore/index">Đơn
+								tại cửa hàng</a></li>
 					</ul></li>
 			</ul>
 		</div>

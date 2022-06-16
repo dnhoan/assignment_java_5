@@ -38,6 +38,7 @@ public class OrderController {
 
 	@GetMapping("edit/{id}")
 	public String edit(Model model, @PathVariable("id") Orders order) {
+		System.out.println("order " + order);
 		this.orderService.edit(model, order);
 		return "index";
 	}

@@ -23,7 +23,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 		registry.addInterceptor(interceptorAuth).addPathPatterns("/admin/orders/*", "/admin/categories/*",
 				"/admin/products/*", "/admin/users/*", "/shop/cart/*", "/shop/orders/*");
 		
-		registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/orders/*", "/admin/categories/*",
+		registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/orders/*","/admin/ordersStore/*", "/admin/categories/*",
 				"/admin/products/*", "/admin/users/*");
 	}
 

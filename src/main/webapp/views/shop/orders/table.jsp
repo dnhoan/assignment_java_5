@@ -72,35 +72,47 @@
 											</tbody>
 										</table>
 									</div>
-									<div>
-										<div class="row">
-											<div class="col-7">
-												<div class="mt-3">
-													<label class="form-label" for="phoneNumber">Số điện
-														thoại </label> <input type="text" class="form-control"
-														id="phoneNumber" name="phoneNumber" disabled required
-														value="${order.phoneNumber }">
-												</div>
-												<div class="mt-3">
-													<label class="form-label" for="address">Địa chỉ
-														giao hàng </label> <input type="text" class="form-control"
-														id="address" name="address" disabled required
-														value="${order.deliveryAddress }">
-												</div>
-												<div class="mt-3">
-													<label class="form-label" for="note">Ghi chú</label> <input
-														type="text" class="form-control" id="note" disabled
-														value="${order.note }" name="note">
-												</div>
-											</div>
-											<div class="col-5">
-												<h3 class="card-text text-danger fs-3 fw-bolder">
-													Tổng tiền:
-													<fmt:setLocale value="vi-VN" />
-													<fmt:formatNumber value="${order.totalMoney}"
-														type="currency" minFractionDigits="0" />
-												</h3>
-											</div>
+									<div class="row ">
+										<h3
+											class="card-text text-danger fs-3 fw-bolder d-flex justify-content-end p-4">
+											Tổng tiền:
+											<fmt:setLocale value="vi-VN" />
+											<fmt:formatNumber value="${order.totalMoney}" type="currency"
+												minFractionDigits="0" />
+										</h3>
+									</div>
+									<div class="row">
+										<div class="col-6">
+											<h4 class="mb-3">Thông tin khách hàng</h4>
+											<p>
+												<b>Họ tên: </b>${order.user.fullname }</p>
+											<p>
+												<b>Email: </b>${order.user.email }</p>
+											<p>
+												<b>Số điện thoại: </b>${order.user.phoneNumber}</p>
+											<p>
+												<b>Địa chỉ: </b>${order.user.address}</p>
+										</div>
+										<div class="col-6">
+											<h4 class="mb-3">Thông tin đơn hàng</h4>
+											<p>
+												<b>Số điện thoại: </b>${order.phoneNumber }</p>
+											<p>
+												<b>Địa chỉ: </b>${order.deliveryAddress }</p>
+											<p>
+												<b>Ghi chú: </b>${order.note}</p>
+											<p>
+												<b>Tạo lúc: </b>
+												<fmt:formatDate pattern="dd-MM-yyyy HH:mm"
+													value="${order.ctime}" var="ctime" />
+												<c:out value="${ctime}" />
+											</p>
+											<p>
+												<b>Cập nhật lúc: </b>
+												<fmt:formatDate pattern="dd-MM-yyyy HH:mm"
+													value="${order.mtime}" var="mtime" />
+												<c:out value="${mtime}" />
+											</p>
 										</div>
 									</div>
 								</div>
@@ -124,13 +136,19 @@
 					<h5>
 						<c:choose>
 							<c:when test="${order.orderStatus == '1'}">
-								<span class="badge text-bg-success">Đã xác nhận</span>
+								<span class="badge text-bg-primary">Đã xác nhận</span>
 							</c:when>
 							<c:when test="${order.orderStatus == '0'}">
-								<span class="badge text-bg-warning">Chưa xác nhận</span>
+								<span class="badge text-bg-secondary">Chưa xác nhận</span>
 							</c:when>
 							<c:when test="${order.orderStatus == '2'}">
 								<span class="badge text-bg-danger">Đã hủy</span>
+							</c:when>
+							<c:when test="${order.orderStatus == '3'}">
+								<span class="badge text-bg-warning">Đang giao</span>
+							</c:when>
+							<c:when test="${order.orderStatus == '4'}">
+								<span class="badge text-bg-success">Giao thành công</span>
 							</c:when>
 						</c:choose>
 					</h5>
