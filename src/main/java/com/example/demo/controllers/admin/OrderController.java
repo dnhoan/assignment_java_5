@@ -52,7 +52,7 @@ public class OrderController {
 		return "redirect:/admin/orders/edit/" + order.getId();
 	}
 	
-	@PostMapping("update/{orderId}/{productId}")
+	@RequestMapping("update/{orderId}/{productId}")
 	public String addProductToOrder(
 			@PathVariable("orderId") Orders order,
 			@PathVariable("productId") Products product,

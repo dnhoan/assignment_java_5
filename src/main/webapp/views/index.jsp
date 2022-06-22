@@ -7,6 +7,12 @@
 <!-- Basic Page Info -->
 <meta charset="utf-8" />
 <title>Admin</title>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+<script
+	src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -108,5 +114,30 @@
 	<!-- Datatable Setting js -->
 	<script
 		src="/assignment_java_5/views/vendors/scripts/datatable-setting.js"></script>
+	<script>
+			const myModalEl = document.getElementById("exampleModal");
+			myModalEl.addEventListener("show.bs.modal", (event) => {
+				let scanner = new Instascan.Scanner({
+					video: document.getElementById("preview"),
+				});
+				Instascan.Camera.getCameras()
+					.then((cameras) => {
+						console.log(cameras);
+						if (cameras.length > 0) {
+							scanner.start(cameras[0]);
+						} else {
+							alert("no carmeras found");
+						}
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+				scanner.addListener("scan", (c) => {
+					window.location.replace(
+						'http://localhost:8080/assignment_java_5/admin/orders/update/49/'+ c + '?quantity=1'
+					);
+				});
+			});
+		</script>
 </body>
 </html>

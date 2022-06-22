@@ -4,7 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 <fmt:setLocale value="${sessionScope.language }" scope="request" />
 <fmt:setBundle basename="global" scope="request" />
-
 <table class="table mt-3 table-striped table-hover">
 	<thead>
 		<tr>

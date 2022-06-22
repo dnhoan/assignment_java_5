@@ -4,7 +4,33 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 <fmt:setLocale value="${sessionScope.language }" scope="request" />
 <fmt:setBundle basename="global" scope="request" />
+<button type="button" class="btn btn-primary" data-bs-toggle="modal"
+	data-bs-target="#exampleModal">Thêm sản phẩm bằng mã vạch</button>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Quét mã sản phẩm</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+					aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+						<div class="">
+							<video id="preview" width="100%"></video>
+						</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary"
+					data-bs-dismiss="modal">Đóng</button>
+			</div>
+		</div>
+	</div>
+</div>
 <table class="table mt-3 table-striped table-hover">
 	<thead>
 		<tr>
@@ -44,7 +70,8 @@
 					</button>
 					<div class="modal fade" id="add${product.id }" tabindex="-1"
 						role="dialog" aria-hidden="true">
-						<div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+						<div class="modal-dialog modal-xl modal-dialog-centered"
+							role="document">
 							<div class="modal-content">
 								<div class="modal-body text-center font-18 p-0">
 									<div class="product-detail-wrap mb-30 m-0">
@@ -57,8 +84,7 @@
 															src="/assignment_java_5/files/${product.image }"
 															class="img-fluid rounded-start" alt="...">
 													</div>
-													<div
-														class="col-lg-6 col-md-12 col-sm-12 text-start">
+													<div class="col-lg-6 col-md-12 col-sm-12 text-start">
 														<form
 															action="/assignment_java_5/admin/orders/update/${orderEdit.id }/${product.id }"
 															method="post">

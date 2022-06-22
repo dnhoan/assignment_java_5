@@ -6,4 +6,5 @@ import com.example.demo.entities.Products;
 
 public interface ProductRepository extends JpaRepository<Products, Integer>{
 
+	boolean existsByName(String name);
 }

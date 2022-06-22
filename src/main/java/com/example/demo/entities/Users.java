@@ -19,8 +19,11 @@ import javax.validation.constraints.Pattern;
 import com.example.demo.constants.Constants;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity(name="users")
 public class Users implements Serializable {
 

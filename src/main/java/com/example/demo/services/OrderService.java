@@ -83,9 +83,10 @@ public class OrderService {
 			orderDetail.setAmount(quantity);
 			orderDetail.setProduct(product);
 		} else {
+			int newQuantity = orderDetail.getAmount() + quantity;
 			orderDetails.remove(orderDetail);
 			orderDetail.setPrice(product.getPrice());
-			orderDetail.setAmount(quantity);
+			orderDetail.setAmount(newQuantity);
 		}
 		orderDetails.add(orderDetail);
 		order.setOrderDetails(orderDetails);
