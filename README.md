@@ -11,4 +11,7 @@ Thêm giỏ hàng
 ![image](https://user-images.githubusercontent.com/74503155/173328511-917d2bba-6027-4b9a-9114-5d6b0a53693c.png)
 Quản lý Sản phẩm
 ![image](https://user-images.githubusercontent.com/74503155/173328555-d5a2c23a-66c3-4b1f-8236-c5b543aef2e9.png)
+Quét mã vạch thêm sản phẩm vào đơn hàng
+![image](https://user-images.githubusercontent.com/74503155/175237147-570ba6ac-1d3a-432d-ba09-d0a4860fa87c.png)
+
 
