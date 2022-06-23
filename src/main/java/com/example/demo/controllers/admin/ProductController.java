@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
 
-
 @Controller
 @RequestMapping("admin/products")
 public class ProductController {
@@ -47,7 +46,8 @@ public class ProductController {
 	public String store(@ModelAttribute("product") @Valid Products product, BindingResult bindingResult,
 			@RequestParam("avatar") MultipartFile attach, RedirectAttributes redirectAttributes)
 			throws IllegalStateException, IOException {
-		if (attach.isEmpty() || !Objects.requireNonNull(attach.getContentType()).split("/")[0].equalsIgnoreCase("image")) {
+		if (attach.isEmpty()
+				|| !Objects.requireNonNull(attach.getContentType()).split("/")[0].equalsIgnoreCase("image")) {
 			bindingResult.addError(new ObjectError("errorAvt", "Vui lòng chọn ảnh"));
 			redirectAttributes.addFlashAttribute("errorAvt", "Vui lòng chọn ảnh");
 		}
@@ -69,7 +69,8 @@ public class ProductController {
 	public String update(@PathVariable("id") int id, @ModelAttribute("product") @Valid Products product,
 			BindingResult bindingResult, @RequestParam("avatar") MultipartFile attach,
 			RedirectAttributes redirectAttributes) throws IllegalStateException, IOException {
-		if (!attach.isEmpty() && !Objects.requireNonNull(attach.getContentType()).split("/")[0].equalsIgnoreCase("image")) {
+		if (!attach.isEmpty()
+				&& !Objects.requireNonNull(attach.getContentType()).split("/")[0].equalsIgnoreCase("image")) {
 			bindingResult.addError(new ObjectError("errorAvt", "Vui lòng chọn ảnh"));
 		}
 		this.productService.validateStringFiedLength(bindingResult, product);
@@ -101,6 +102,24 @@ public class ProductController {
 		return "redirect:/admin/products/index";
 	}
 
+	@GetMapping("printTem/{id}")
+	public String printTem(@PathVariable("id") Products product) {
+		this.productService.printTem(product);
+		return "redirect:/admin/products/index";
+	}
+
+	@GetMapping("printBatchTem")
+	public String printBatchTem() {
+		this.productService.printBatchTem();
+		return "redirect:/admin/products/index";
+	}
+
+	@GetMapping("exportBatchExcel")
+	public String exportBatchExcel() throws IOException {
+		this.productService.exportBatchExcel();
+		return "redirect:/admin/products/index";
+	}
+
 	@GetMapping("downloadFile")
 	public void downloadFile() throws IOException {
 		String fullPath = this.servletContext.getRealPath("/files_download/pattern_product.xlsx");
@@ -126,7 +145,8 @@ public class ProductController {
 
 	@PostMapping("importExcel")
 	public String importExcel(@RequestParam("category_id") Categories categoy,
-			@RequestParam("file_excel") MultipartFile excelPart, RedirectAttributes redirectAttributes) throws IllegalStateException, IOException {
+			@RequestParam("file_excel") MultipartFile excelPart, RedirectAttributes redirectAttributes)
+			throws IllegalStateException, IOException {
 		this.productService.importFileExcel(excelPart, categoy, redirectAttributes);
 		return "redirect:/admin/products/index";
 	}

@@ -4,6 +4,15 @@
 <%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt"%>
 <fmt:setLocale value="${sessionScope.language }" scope="request" />
 <fmt:setBundle basename="global" scope="request" />
+<div class="btn-group" role="group" aria-label="Basic outlined example">
+	<a class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="In mã QR"
+		href="/assignment_java_5/admin/products/printBatchTem"><i
+		class="bi bi-printer-fill"></i></a>
+	 <a class="btn btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Xuất file Excel"
+		href="/assignment_java_5/admin/products/exportBatchExcel"><i
+		class="bi bi-file-earmark-excel-fill"></i></a>
+</div>
+
 <table class="table mt-3 table-striped table-hover">
 	<thead>
 		<tr>
@@ -14,7 +23,7 @@
 			<th>Màu sắc</th>
 			<th>Kích cỡ</th>
 			<th>Danh mục</th>
-			<th colspan="2">Thao tác</th>
+			<th colspan="3">Thao tác</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -36,7 +45,7 @@
 				<td>${product.color}</td>
 				<td>${product.size }</td>
 				<td>${product.category.name }</td>
-				<td style="width:50px;">
+				<td style="width: 30px;">
 					<button type="button" class="btn btn-danger" data-toggle="modal"
 						data-target="#delete${product.id }">
 						<i class="bi bi-trash3-fill"></i>
@@ -67,9 +76,12 @@
 						</div>
 					</div>
 				</td>
-				<td style="width:50px;"><a class="btn btn-primary"
+				<td style="width: 30px;"><a class="btn btn-primary"
 					href="/assignment_java_5/admin/products/edit/${product.id }?page=${items.number}&size=${items.size}"><i
 						class="bi bi-pencil-square"></i></a></td>
+				<td style="width: 30px;"><a class="btn btn-secondary"
+					href="/assignment_java_5/admin/products/printTem/${product.id }"><i
+						class="bi bi-printer-fill"></i></a></td>
 			</tr>
 		</c:forEach>
 	</tbody>
